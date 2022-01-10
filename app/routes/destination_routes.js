@@ -9,6 +9,7 @@ const bcrypt = require('bcrypt')
 // pull in error types and the logic to handle them and set status codes
 const errors = require('../../lib/custom_errors')
 const axios = require('axios')
+require('dotenv').config()
 
 
 const BadParamsError = errors.BadParamsError
@@ -35,5 +36,6 @@ router.get('/:destination', (req, res, next) => {
     })
     .catch(next)
 })
+
 
 module.exports = router
