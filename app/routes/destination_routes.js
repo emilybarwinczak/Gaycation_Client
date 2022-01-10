@@ -25,7 +25,8 @@ const router = express.Router()
 
 // API call to get all destinations
 router.get('/:destination', (req, res, next) => {
-    axios.get(`https://api.roadgoat.com/api/v2/destinations${req.params.destination}`, {
+    const key_value = `?q=${req.params.destination}`
+    axios.get(`https://api.roadgoat.com/api/v2/destinations/auto_complete${key_value}`, {
         headers: { 
             'Authorization': `Basic ${process.env.AUTH_KEY}`
           }
