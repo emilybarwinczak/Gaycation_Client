@@ -1,7 +1,8 @@
 const mongoose = require('mongoose')
 const reviewSchema = require('./review')
+const Schema = mongoose.Schema
 
-const destinationSchema = new mongoose.Schema(
+const destinationSchema = new Schema(
 	{
 		city: {
 			type: String,
@@ -9,20 +10,24 @@ const destinationSchema = new mongoose.Schema(
 		},
 		state: {
 			type: String,
-			required: true,
 		},
 		country: {
-            type: String,
-            required: true
+			type: String,
         },
         lgbtRating: {
-            type: Number
+			type: Number
         },
         image_url: String,
         description: String,
-        users: Array,
+        owner: {
+			type: Schema.Types.ObjectId,
+			ref: 'User'
+		},
         business: Array,
-        reviews: [reviewSchema]
+        reviews: [reviewSchema],
+		roadGoatId: {
+			type: String
+		}
 	},
 	{
 		timestamps: true,
