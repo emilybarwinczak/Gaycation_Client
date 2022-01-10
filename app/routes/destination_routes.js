@@ -9,6 +9,8 @@ const bcrypt = require('bcrypt')
 const errors = require('../../lib/custom_errors')
 const axios = require('axios')
 
+require('dotenv').config()
+
 const BadParamsError = errors.BadParamsError
 const BadCredentialsError = errors.BadCredentialsError
 const bcryptSaltRounds = 10
@@ -22,14 +24,13 @@ const Review = require('../models/review')
 // it will also set `res.user`
 // const requireToken = passport.authenticate('bearer', { session: false })
 const router = express.Router()
-const auth_key = process.env.AUTH_KEY
 
 
 // API call to get all destinations
 router.get('/destination', (req, res, next) => {
     axios.get(`https://api.roadgoat.com/api/v2/destinations/new-york-ny-usa`, {
         headers: { 
-            'Authorization': `Basic ${auth_key}`
+            'Authorization': `Basic ${process.env.AUTH_KEY}`
           }
     })
     .then(resp => {
