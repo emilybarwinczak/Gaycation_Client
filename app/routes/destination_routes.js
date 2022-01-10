@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express')
 // jsonwebtoken docs: https://github.com/auth0/node-jsonwebtoken
 const crypto = require('crypto')
@@ -9,7 +10,6 @@ const bcrypt = require('bcrypt')
 const errors = require('../../lib/custom_errors')
 const axios = require('axios')
 
-require('dotenv').config()
 
 const BadParamsError = errors.BadParamsError
 const BadCredentialsError = errors.BadCredentialsError
@@ -19,16 +19,12 @@ const Destination = require('../models/destination')
 const User = require('../models/user')
 const Review = require('../models/review')
 
-// passing this as a second argument to `router.<verb>` will make it
-// so that a token MUST be passed for that route to be available
-// it will also set `res.user`
-// const requireToken = passport.authenticate('bearer', { session: false })
 const router = express.Router()
 
 
 // API call to get all destinations
-router.get('/destination', (req, res, next) => {
-    axios.get(`https://api.roadgoat.com/api/v2/destinations/new-york-ny-usa`, {
+router.get('/:destination', (req, res, next) => {
+    axios.get(`https://api.roadgoat.com/api/v2/destinations${req.params.destination}`, {
         headers: { 
             'Authorization': `Basic ${process.env.AUTH_KEY}`
           }
