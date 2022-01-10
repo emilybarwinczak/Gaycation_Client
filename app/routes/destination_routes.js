@@ -23,8 +23,33 @@ const Review = require('../models/review')
 const router = express.Router()
 
 
-// API call to get all destinations
-router.get('/:destination', (req, res, next) => {
+// API call to get top 5 destinations
+router.get('/destinations', (req, res, next) => {
+    // function getRandomCity(arr) {
+    //     const randomIndex = Math.floor(Math.random()* arr.length - 1)
+    //     const city = arr[randomIndex]
+    //     return city
+    // }
+    // const citiesArray = ['new-york', 'london', 'san-francisco', 'paris', 'los-angeles', 'amsterdam', 'chicago', 'barcelona', 'boston', 'rome'] 
+    axios.get(`https://api.roadgoat.com/api/v2/destinations/auto_complete?q=${req.params}`, 
+    {
+        headers: { 
+            'Authorization': `Basic ${process.env.AUTH_KEY}`
+          }
+    })
+    .then(resp => {
+        console.log('Destination:\n', resp.data.included)
+        function isLgbtFriendly(lgbt) {
+            return lgbt.id === 18;
+        }
+        res.json(resp.data.included)
+    })
+    .catch(next)
+})
+
+
+// API call to get one destination
+router.get('/destinations/:destination', (req, res, next) => {
     const key_value = `?q=${req.params.destination}`
     axios.get(`https://api.roadgoat.com/api/v2/destinations/auto_complete${key_value}`, {
         headers: { 
@@ -38,5 +63,6 @@ router.get('/:destination', (req, res, next) => {
     .catch(next)
 })
 
+router.get('')
 
 module.exports = router
