@@ -21,22 +21,22 @@ const Review = require('../models/review')
 // so that a token MUST be passed for that route to be available
 // it will also set `res.user`
 // const requireToken = passport.authenticate('bearer', { session: false })
-const API_KEY = process.env.API_KEY
-const SECRET_KEY = process.env.SECRET_KEY
-// instantiate a router (mini app that only handles routes)
 const router = express.Router()
-const auth_key = Buffer.from(`${API_KEY}:${SECRET_KEY}`).toString('base64');
+const auth_key = process.env.AUTH_KEY
 
 
 // API call to get all destinations
-// router.get('/destinations', (req, res, next) => {
-//     axios.get('https://api.roadgoat.com/api/v2/destinations/auto_complete?q=barcelona', {
-//         headers: {
-//             'Authorization': `Basic ${auth_key}`
-//         }
-//     }).then(resp => {
-//         console.log('Destination:\n', resp.data)
-//     }).catch(next)
-// })
+router.get('/destination', (req, res, next) => {
+    axios.get(`https://api.roadgoat.com/api/v2/destinations/new-york-ny-usa`, {
+        headers: { 
+            'Authorization': `Basic ${auth_key}`
+          }
+    })
+    .then(resp => {
+        console.log('Destination:\n', resp.data)
+        res.json(resp.data)
+    })
+    .catch(next)
+})
 
 module.exports = router
