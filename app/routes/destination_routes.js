@@ -8,6 +8,7 @@ const bcrypt = require('bcrypt')
 // pull in error types and the logic to handle them and set status codes
 const errors = require('../../lib/custom_errors')
 const axios = require('axios')
+require('dotenv').config()
 
 const BadParamsError = errors.BadParamsError
 const BadCredentialsError = errors.BadCredentialsError
@@ -29,14 +30,16 @@ const auth_key = Buffer.from(`${API_KEY}:${SECRET_KEY}`).toString('base64');
 
 
 // API call to get all destinations
-// router.get('/destinations', (req, res, next) => {
-//     axios.get('https://api.roadgoat.com/api/v2/destinations/auto_complete?q=barcelona', {
-//         headers: {
-//             'Authorization': `Basic ${auth_key}`
-//         }
-//     }).then(resp => {
-//         console.log('Destination:\n', resp.data)
-//     }).catch(next)
-// })
-
+router.get('/destinations/:destination', (req, res, next) => {
+    axios.get(`https://api.roadgoat.com/api/v2/destinations/${req.params.destination}`, {
+        headers: { 
+            'Authorization': `Basic ${process.env.AUTH_KEY}`
+        }
+    .then(resp => {
+        console.log('Destination:\n', resp.data)
+        res.json(resp.data)
+    })
+    .catch(next)
+})
+})
 module.exports = router
