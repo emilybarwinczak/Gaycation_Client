@@ -36,9 +36,11 @@ router.get('/buisnesses', (req, res, next) => {
     .catch(next)
 })
 
-// SHOW only one buisness
+// // POST --> create a buisness put it in db
+// router.post('/businesses/:destinationId/:businessId')
+//     Destination.findById(req.params.destinationId)
+//     .then(des => {
 
-
-
+//     })
 
 module.exports = router
