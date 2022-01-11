@@ -4,7 +4,7 @@ const Schema = mongoose.Schema
 const reviewSchema = new Schema(
     {
         // want to create a refernece  to the username by the objectId
-        username: {
+        userId: {
             type: Schema.Types.ObjectId,
             ref: 'user'
         },
