@@ -22,18 +22,29 @@ const Review = require('../models/review')
 
 const router = express.Router()
 
+// const destinationReq = desId => {
+//     return axios.get(`https://api.roadgoat.com/api/v2/destinations/auto_complete${desId}`, {
+//         headers: { 
+//             'Authorization': `Basic ${process.env.AUTH_KEY}`
+//           }
+//     })
+// }
+
+// const openToAllReq = buisReq => {
+
+// }
+
 
 // API call to GET one destination based on city/country name
 router.get('/destinations/:destinationname', (req, res, next) => {
     const key_value = `?q=${req.params.destinationname}`
-
     axios.get(`https://api.roadgoat.com/api/v2/destinations/auto_complete${key_value}`, {
         headers: { 
             'Authorization': `Basic ${process.env.AUTH_KEY}`
           }
     })
     .then(resp => {
-        console.log('Destination:\n', resp.data)
+        // console.log('Destination:\n', resp.data)
         res.json(resp.data)
     })
     .catch(next)
@@ -74,6 +85,7 @@ router.post('/destinations', (req, res, next) => {
     .then(data => res.status(200).json(data))
     .catch(next)
 })
+
 
 router.delete('/destination/:destinationId', (req, res, next) => {
     Destination.findOneAndDelete({
