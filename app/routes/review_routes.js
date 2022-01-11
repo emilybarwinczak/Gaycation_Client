@@ -6,37 +6,42 @@ const passport = require('passport')
 // bcrypt docs: https://github.com/kelektiv/node.bcrypt.js
 const bcrypt = require('bcrypt')
 // pull in error types and the logic to handle them and set status codes
-const errors = require('../../lib/custom_errors')
-const axios = require('axios')
-const router = require('./destination_routes')
+const router = express.Router()
+const Destination = require('../models/destination')
 
-
-// INDEX --> GET
-router.get('/destination/reviews', (req, res, next) => {
-    Destination.find()
+// INDEX --> GET all comments from one destination
+router.get('/reviews/:destinationId', (req, res, next) => {
+    Destination.findById(req.params.destinationId)
         .then((destinations) => {
-            return destinations.map((destination) => destination.toObject())
+            // return destinations.map((destination) => destination.toObject())
+            return destinations.reviews
         })
-        .then((destinations) => res.status(200).json({ destinations: destinations }))
+        .then((revs) => res.status(200).json(revs))
         .catch(next)
 })
 
-// SHOW --> GET
-router.get('/desination/reviews/:id', (req, res, next) => {
-    Destination.findById(req.params.id)
-    .then(handle404)
-    .then((destination) => res.status(200).json({ destination: destination.toObject() }))
+// SHOW --> GET one comment from one destination
+router.get('/reviews/:destinationId/:reviewId', (req, res, next) => {
+    Destination.findById(req.params.destinationId)
+    .then((destination) => {
+        return destination.reviews.id(req.params.reviewId)
+    })
+    .then((revs) => res.status(200).json(revs))
     .catch(next)
 })
 
 // CREATE --> POST
-router.post('/reviews', (req, res, next) => {
-    req.body.review.username = req.user.id
-
-    Destination.create(req.body.destinationId)
-        .then((destination) => {
-            res.status(201).json({ destination: destination.toObject() })
+router.post('/reviews/:destinationId', (req, res, next) => {
+    // req.body.review.username = req.user.id
+    console.log('bla blah blah')
+    Destination.findById(req.params.destinationId)
+        .then(des => {
+            console.log('is this the city?\n', des)
+            des.reviews.push(req.body.review)
+            des.save()
         })
+        .then((review) => res.status(200).json({ review: review }))
         .catch(next)
 })
-module.exports.router
+
+module.exports = router
