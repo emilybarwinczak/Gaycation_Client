@@ -8,6 +8,8 @@ const bcrypt = require('bcrypt')
 // pull in error types and the logic to handle them and set status codes
 const router = express.Router()
 const Destination = require('../models/destination')
+const customErrors = require('../../lib/custom_errors')
+const handle404 = customErrors.handle404
 
 // INDEX --> GET all comments from one destination
 router.get('/reviews/:destinationId', (req, res, next) => {
@@ -30,18 +32,47 @@ router.get('/reviews/:destinationId/:reviewId', (req, res, next) => {
     .catch(next)
 })
 
-// CREATE --> POST
+// POST --> Create a review for one destination
 router.post('/reviews/:destinationId', (req, res, next) => {
-    // req.body.review.username = req.user.id
-    console.log('bla blah blah')
     Destination.findById(req.params.destinationId)
         .then(des => {
-            console.log('is this the city?\n', des)
+            // console.log('is this the city?\n', des)
             des.reviews.push(req.body.review)
             des.save()
         })
         .then((review) => res.status(200).json({ review: review }))
         .catch(next)
+})
+
+// DELETE --> remove one review from one destination
+router.delete('/reviews/:destinationId/:reviewId', (req, res, next) => {
+    Destination.findById(req.params.destinationId)
+        .then(des => {
+            let review = des.reviews.find(rev => {
+                return rev._id.toString() === req.params.reviewId.toString()
+            })
+            des.reviews.splice(des.reviews.indexOf(review), 1)
+            return des.save()
+        })
+        .then(data => {
+            res.status(201).json(data)
+        })
+        .catch(next)
+})
+
+// PATCH --> EDIT one review on one destination
+router.patch('/reviews/:destinationId/:reviewId', (req, res, next) => {
+    Destination.findByIdAndUpdate(req.params.destinationId)
+        .then(handle404)
+        .then((des) => {
+            const review = des.reviews.id(req.params.reviewId)
+            // console.log('this is review: ' ,review)
+            // console.log('this is des: ', des)   
+            review.set(req.body.review)
+            return des.save()
+        })
+    .then(() => res.sendStatus(204))
+    .catch(next)
 })
 
 module.exports = router

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const businessSchema = require('./buisness')
 const reviewSchema = require('./review')
 const Schema = mongoose.Schema
 
@@ -23,7 +24,7 @@ const destinationSchema = new Schema(
 			type: Schema.Types.ObjectId,
 			ref: 'User'
 		},
-        business: Array,
+        business: [businessSchema],
         reviews: [reviewSchema],
 		roadGoatId: {
 			type: String
