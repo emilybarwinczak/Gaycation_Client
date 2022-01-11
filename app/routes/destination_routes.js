@@ -72,9 +72,11 @@ router.post('/destinations', (req, res, next) => {
 })
 
 router.delete('/destination/:destinationId', (req, res, next) => {
-    Destination.findOne({
-        _id: req.params.
+    Destination.findOneAndDelete({
+        _id: req.params.destinationId
     })
+    .then(() => res.sendStatus(204))
+    .catch(next)
 })
 
 module.exports = router
