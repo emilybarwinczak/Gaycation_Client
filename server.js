@@ -9,7 +9,7 @@ const cors = require('cors')
 const destinationRoutes = require('./app/routes/destination_routes')
 const userRoutes = require('./app/routes/user_routes')
 const reviewRoutes = require('./app/routes/review_routes')
-const businessRoutes = require('./app/routes/buisness_routes')
+const businessRoutes = require('./app/routes/business_routes')
 
 // require middleware
 const errorHandler = require('./lib/error_handler')
