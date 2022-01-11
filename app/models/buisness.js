@@ -7,7 +7,10 @@ const businessSchema = new Schema(
             type: String
         },
         image_url: String,
-        website: String
+        website: String,
+        yelpId: {
+			type: String
+		}
     },
     {
         timestamps: true
