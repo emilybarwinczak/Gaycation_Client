@@ -11,6 +11,7 @@ const errors = require('../../lib/custom_errors')
 const axios = require('axios')
 const requireToken = passport.authenticate('bearer', { session: false })
 
+
 const BadParamsError = errors.BadParamsError
 const BadCredentialsError = errors.BadCredentialsError
 const bcryptSaltRounds = 10
@@ -21,9 +22,11 @@ const Review = require('../models/review')
 
 const router = express.Router()
 
+
 // API call to GET one destination based on city/country name
 router.get('/destinations/:destinationname', (req, res, next) => {
     const key_value = `?q=${req.params.destinationname}`
+
     axios.get(`https://api.roadgoat.com/api/v2/destinations/auto_complete${key_value}`, {
         headers: { 
             'Authorization': `Basic ${process.env.AUTH_KEY}`
@@ -35,6 +38,7 @@ router.get('/destinations/:destinationname', (req, res, next) => {
     })
     .catch(next)
 })
+
 
 router.get('/destinations', (req, res, next) => {
     Destination.find({})
@@ -78,5 +82,6 @@ router.delete('/destination/:destinationId', (req, res, next) => {
     .then(() => res.sendStatus(204))
     .catch(next)
 })
+
 
 module.exports = router
