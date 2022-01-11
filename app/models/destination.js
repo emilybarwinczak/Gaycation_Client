@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const businessSchema = require('./buisness')
+const businessSchema = require('./business')
 const reviewSchema = require('./review')
 const Schema = mongoose.Schema
 
