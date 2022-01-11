@@ -79,7 +79,11 @@ router.post('/destinations', (req, res, next) => {
     .catch(next)
 })
 
+<<<<<<< HEAD
 // DELETE one destination from db
+=======
+
+>>>>>>> 8a6cb7a789df4530826fe5c9736313d072d10d6a
 router.delete('/destination/:destinationId', (req, res, next) => {
     Destination.findOneAndDelete({
         _id: req.params.destinationId
@@ -87,5 +91,6 @@ router.delete('/destination/:destinationId', (req, res, next) => {
     .then(() => res.sendStatus(204))
     .catch(next)
 })
+
 
 module.exports = router
