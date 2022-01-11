@@ -43,7 +43,9 @@ router.get('/destinations', (req, res, next) => {
 router.post('/destinations', (req, res, next) => {
     Destination.findOne({
         roadGoatId: req.body.roadGoatId
-    }).populate('reviews')
+    })
+    .populate('reviews')
+    .populate('business')
     .then(des => {
         if (des) {
             des.users.push(req.user._id)
