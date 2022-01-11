@@ -11,14 +11,7 @@ const errors = require('../../lib/custom_errors')
 const axios = require('axios')
 const requireToken = passport.authenticate('bearer', { session: false })
 
-
-const BadParamsError = errors.BadParamsError
-const BadCredentialsError = errors.BadCredentialsError
-const bcryptSaltRounds = 10
-
 const Destination = require('../models/destination')
-const User = require('../models/user')
-const Review = require('../models/review')
 
 const router = express.Router()
 
@@ -50,7 +43,7 @@ router.get('/destinations/:destinationname', (req, res, next) => {
     .catch(next)
 })
 
-
+// GET --> get all destinaitions in db
 router.get('/destinations', (req, res, next) => {
     Destination.find({})
     .then(des => {
@@ -86,7 +79,11 @@ router.post('/destinations', (req, res, next) => {
     .catch(next)
 })
 
+<<<<<<< HEAD
+// DELETE one destination from db
+=======
 
+>>>>>>> 8a6cb7a789df4530826fe5c9736313d072d10d6a
 router.delete('/destination/:destinationId', (req, res, next) => {
     Destination.findOneAndDelete({
         _id: req.params.destinationId
