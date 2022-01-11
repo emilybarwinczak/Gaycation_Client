@@ -14,7 +14,7 @@ const { default: axios } = require('axios')
 const handle404 = customErrors.handle404
 
 // GET all "open to all" businesses from YELP Fusion API
-router.get('/buisnesses/:destinationname', (req, res, next) => {
+router.get('/businesses/:destinationname', (req, res, next) => {
     axios.get(`https://api.yelp.com/v3/businesses/search?location=${req.params.destinationname}&attributes=open_to_all`, {
         headers: {
             "Authorization": `Bearer ${process.env.API_KEY}`
@@ -28,17 +28,24 @@ router.get('/buisnesses/:destinationname', (req, res, next) => {
 })
 
 // GET --> SHOW all "open to all" buisnesses
-router.get('/buisnesses', (req, res, next) => {
-    Destination.find({})
-    .then(buis => {
-        res.json(buis)
+router.get('/businesses/:destinationId', (req, res, next) => {
+    Destination.findById(req.params.destinationId)
+    .then(busi => {
+        return busi.businesses
     })
+    .then(busi => res.status(200).json(busi))
     .catch(next)
 })
 
-// SHOW only one buisness
-
-
-
+// // POST --> create a buisness put it in db
+router.post('/businesses/:destinationId', (req, res, next) => {
+    Destination.findById(req.params.destinationId)
+    .then(des => {
+        des.business.push(req.body.business)
+        des.save()
+    })
+    .then(business => res.status(200).json({ business: business }))
+    .catch(next)
+})
 
 module.exports = router
