@@ -41,6 +41,21 @@ router.get('/destinations', requireToken, (req, res, next) => {
     .catch(next)
 })
 
+// GET --> show ONE destination by ID
+router.get('/destination/:destinationId', requireToken, (req, res, next) => {
+    const key_value = `?q=${req.params.destinationId}`
+    axios.get(`https://api.roadgoat.com/api/v2/destinations/${key_value}`, {
+        headers: { 
+            'Authorization': `Basic ${process.env.AUTH_KEY}`
+          }
+    })
+    .then(rest => {
+        res.json(rest.data)
+    })
+    .catch(next)
+})
+
+
 // POST create a destination into database
 router.post('/destinations', requireToken, (req, res, next) => {
     if(req.body.body.imageUrl) {
