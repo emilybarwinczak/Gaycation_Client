@@ -16,7 +16,7 @@ const Destination = require('../models/destination')
 const router = express.Router()
 
 // API call to GET one destination based on city/country name
-router.get('/destinations/:destinationname', (req, res, next) => {
+router.get('/destinations/:destinationname', requireToken, (req, res, next) => {
     const key_value = `?q=${req.params.destinationname}`
     axios.get(`https://api.roadgoat.com/api/v2/destinations/auto_complete${key_value}`, {
         headers: { 
@@ -31,8 +31,10 @@ router.get('/destinations/:destinationname', (req, res, next) => {
 })
 
 // GET --> get all destinaitions in db
-router.get('/destinations', (req, res, next) => {
-    Destination.find({})
+router.get('/destinations', requireToken, (req, res, next) => {
+    Destination.find({
+        owner: req.user.id
+    })
     .then(des => {
         res.json(des)
     })
@@ -40,34 +42,44 @@ router.get('/destinations', (req, res, next) => {
 })
 
 // POST create a destination into database
-router.post('/destinations', (req, res, next) => {
-    Destination.findOne({
-        roadGoatId: req.body.roadGoatId
-    }).populate('reviews')
-    .then(des => {
-        if (des) {
-            des.users.push(req.user._id)
-            return des.save()
-        } else {
-            return Destination.create({
-                    city: req.body.city,
-                    state: req.body.state,
-                    country: req.body.country,
-                    reviews: [],
-                    lgbtRating: req.body.lgbtRating,
-                    image_url: req.body.image_url,
-                    description: req.body.description,
-                    business: [],
-                    roadGoatId: req.body.roadGoatId
-            })
-        }
-    })
-    .then(data => res.status(200).json(data))
-    .catch(next)
+router.post('/destinations', requireToken, (req, res, next) => {
+    if(req.body.body.imageUrl) {
+        // console.log('this is req.body', req.body.body.imageUrl)
+        req.body.owner = req.user.id
+        Destination.create({
+            city:req.body.body.cityName,
+            country:req.body.body.cityCountry,
+            image_url:req.body.body.imageUrl,
+            description:req.body.body.cityDescription,
+            owner: req.body.owner,
+            buisness:[],
+            reviews:[],
+            roadGoatId: req.body.body.cityId
+        })
+        // .then(errors.handle404)
+        .then(data => res.status(200).json(data))
+        .catch(next)
+    } else {
+        // console.log('this is req.body', req.body.body.cityImageId)
+        req.body.owner = req.user.id
+        Destination.create({
+            city:req.body.body.cityName,
+            country:req.body.body.cityCountry,
+            image_url:req.body.body.cityImageId,
+            description:req.body.body.cityDescription,
+            owner: req.body.owner,
+            buisness:[],
+            reviews:[],
+            roadGoatId: req.body.body.cityId
+        })
+        // .then(errors.handle404)
+        .then(data => res.status(200).json(data))
+        .catch(next)
+    }
 })
 
 // DELETE one destination from db
-router.delete('/destination/:destinationId', (req, res, next) => {
+router.delete('/destination/:destinationId', requireToken, (req, res, next) => {
     Destination.findOneAndDelete({
         _id: req.params.destinationId
     })
