@@ -60,7 +60,7 @@ router.delete('/reviews/:destinationId/:reviewId', (req, res, next) => {
         .catch(next)
 })
 
-// PATCH --> EDIT one review on one destination
+// PATCH --> EDIT one review
 router.patch('/reviews/:destinationId/:reviewId', (req, res, next) => {
     Destination.findByIdAndUpdate(req.params.destinationId)
         .then(handle404)
