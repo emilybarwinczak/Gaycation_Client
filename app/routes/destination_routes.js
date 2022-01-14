@@ -45,7 +45,7 @@ router.get('/destinations', requireToken, (req, res, next) => {
 router.get('/destinations/gaycations/:destinationId', requireToken, (req, res, next) => {
     Destination.find({
         roadGoatId: req.params.destinationId
-    })
+    }).populate('reviews')
     .then(des => {
         res.json(des)
     })
