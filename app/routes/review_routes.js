@@ -10,6 +10,7 @@ const router = express.Router()
 const Destination = require('../models/destination')
 const customErrors = require('../../lib/custom_errors')
 const handle404 = customErrors.handle404
+const requireToken = passport.authenticate('bearer', { session: false })
 
 // INDEX --> GET all comments from one destination
 router.get('/reviews/:destinationId', (req, res, next) => {
