@@ -41,6 +41,17 @@ router.get('/destinations', requireToken, (req, res, next) => {
     .catch(next)
 })
 
+// GET --> get only one destination from the db based on the roatGoatId
+router.get('/destinations/gaycations/:destinationId', requireToken, (req, res, next) => {
+    Destination.find({
+        roadGoatId: req.params.destinationId
+    })
+    .then(des => {
+        res.json(des)
+    })
+    .catch(next)
+})
+
 // GET --> show ONE destination by ID
 router.get('/destination/:destinationId', requireToken, (req, res, next) => {
     const key_value = `${req.params.destinationId}`
